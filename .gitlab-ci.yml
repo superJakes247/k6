@@ -18,7 +18,7 @@ performance-test-uat:
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
-    - k6 run ./tests/__verification__/__load_performance__/perf-test.js --summary-export=load-performance.json
+    - k6 run ./__load_performance__/perf-test.js --summary-export=load-performance.json
   artifacts:
     reports:
       load_performance: load-performance.json
@@ -30,7 +30,7 @@ performance-test-uat:
 #     entrypoint: ['']
 #   script:
 #     - echo "executing local k6 in k6 container..."
-#     - k6 run ./tests/__verification__/__load_performance__/sql-perf-test.js --summary-export=sql-load-performance.json
+#     - k6 run ./__load_performance__/sql-perf-test.js --summary-export=sql-load-performance.json
 #   artifacts:
 #     reports:
 #       load_performance: sql-load-performance.json
