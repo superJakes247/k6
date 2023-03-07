@@ -11,6 +11,9 @@ include:
 #     reports:
 #       dotenv: build.env
 
+publish:
+  when: never
+
 performance-test-uat:
   stage: verify
   image: 
