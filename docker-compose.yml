@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  generate-env:
+    image: docker-registry.gray.net/ci/deploy-tools
+    volumes:
+      - .:/api
+    working_dir: /api
+    command: bash -c "
+      ag-deploy encrypt -d -p ' ' \"$$(cat .env.enc)\" > .env"
+
+  generate-enc:
+    image: docker-registry.gray.net/ci/deploy-tools
+    volumes:
+      - .:/api
+    working_dir: /api
+    command: bash -c "
+      ag-deploy encrypt -p ' ' \"$$(cat .env)\" > .env.enc"
+
+  testtools:
+    image: docker-registry.agpl.cloud/common/node-testtools:18
+    user: node
+    container_name: testtools
+    hostname: testtools
+    volumes:
+      - ./:/project
+    working_dir: /project
+
+  performance:
+    image: docker-registry.gray.net/common/performance-k6
+    container_name: performance-k6
+    volumes:
+    - ./__load_performance__:/scripts
+    env_file: .env

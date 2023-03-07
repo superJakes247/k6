@@ -1,0 +1,20 @@
+{
+  "name": "tool-api-performance-test",
+  "version": "1.0.0",
+  "description": "repo to try out K6 testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.gray.net:retail/testing/tool-api-performance-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}

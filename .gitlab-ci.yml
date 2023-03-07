@@ -1,0 +1,39 @@
+include:
+  - { project: retail/delivery-engineering/tool-gitlab-jobs, file: pipelines/microservice-v2.yml }
+
+# set-env-vars:
+#   stage: build
+#   image: docker-registry.gray.net/ci/deploy-tools
+#   script:
+#     - export K6_DB_TEST=$(ag-deploy encrypt -d OcE4Lnfy5Atg6SOhSNMvfJOmsKenLn+GhhkusyDBzYHrWwM3hFNOxZdJvujxTSZNDEa8H+W4jKCiCofOeHQnqfIm/R17ZR3PTzPvlbJglfe9TiShFWR5ZoC+fzkygVmYrPDCA/sVKqdTZzzgaLQaFmBX2XfoXczX3Lmr/PeFXCk=)
+#     - echo "K6_DB_TEST=$K6_DB_TEST" >> build.env
+#   artifacts:
+#     reports:
+#       dotenv: build.env
+
+performance-test-uat:
+  stage: verify
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./tests/__verification__/__load_performance__/perf-test.js --summary-export=load-performance.json
+  artifacts:
+    reports:
+      load_performance: load-performance.json
+
+# sql-performance-test-uat:
+#   stage: verify
+#   image: 
+#     name: docker-registry.gray.net/common/performance-k6
+#     entrypoint: ['']
+#   script:
+#     - echo "executing local k6 in k6 container..."
+#     - k6 run ./tests/__verification__/__load_performance__/sql-perf-test.js --summary-export=sql-load-performance.json
+#   artifacts:
+#     reports:
+#       load_performance: sql-load-performance.json
+#   needs:
+#     - job: set-env-vars
+#       artifacts: true
