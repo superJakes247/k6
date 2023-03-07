@@ -12,10 +12,10 @@ include:
 #       dotenv: build.env
 
 publish:
-  when: never
+  when: manual
 
 performance-test-uat:
-  stage: verify
+  stage: test
   image: 
     name: docker-registry.gray.net/common/performance-k6
     entrypoint: ['']
