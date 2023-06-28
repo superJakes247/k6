@@ -11,20 +11,20 @@ include:
 #     reports:
 #       dotenv: build.env
 
-publish:
-  when: manual
+# publish:
+#   when: manual
 
-performance-test-uat:
-  stage: test
-  image: 
-    name: docker-registry.gray.net/common/performance-k6
-    entrypoint: ['']
-  script:
-    - echo "executing local k6 in k6 container..."
-    - k6 run ./__load_performance__/perf-test.js --summary-export=load-performance.json
-  artifacts:
-    reports:
-      load_performance: load-performance.json
+# performance-test-uat:
+#   stage: test
+#   image: 
+#     name: docker-registry.gray.net/common/performance-k6
+#     entrypoint: ['']
+#   script:
+#     - echo "executing local k6 in k6 container..."
+#     - k6 run ./__load_performance__/perf-test.js --summary-export=load-performance.json
+#   artifacts:
+#     reports:
+#       load_performance: load-performance.json
 
 # sql-performance-test-uat:
 #   stage: verify

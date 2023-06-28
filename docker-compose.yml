@@ -28,7 +28,9 @@ services:
 
   performance:
     image: docker-registry.gray.net/common/performance-k6
+    user: root
     container_name: performance-k6
     volumes:
     - ./__load_performance__:/scripts
+    - $PWD:/results
     env_file: .env
