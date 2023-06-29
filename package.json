@@ -16,5 +16,9 @@
     "eslint": "^8.35.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "string-comparison": "^1.1.0"
   }
 }

@@ -29,3 +29,5 @@ yarn-error.log*
 .env.mocked
 
 test_results.csv
+*logs*
+generated-tests.js
