@@ -4,34 +4,28 @@ import http from 'k6/http';
 import { SharedArray } from 'k6/data';
 import { check, group, sleep } from 'k6';
 import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
-import { randomIntBetween } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
-
-export const options = {
-  discardResponseBodies: true,
-  scenarios: {
-    documentStoreRampUp: {
-      executor: 'ramping-vus',
-      startVUs: 10,
-      stages: [
-        { duration: '1m', target: 40 },
-        { duration: '1m', target: 100 },
-      ],
-      gracefulRampDown: '3s',
-    },
-  },
-};
+import { scenario } from 'k6/execution';
 
 const dataFile = new SharedArray('filesInAWSOnly', function () {
   return JSON.parse(open('./files-in-aws-only.json'));
 });
 
+export const options = {
+  scenarios: {
+    linearTest: {
+      executor: 'shared-iterations',
+      vus: 10,
+      iterations: dataFile.length,
+      maxDuration: "6m",
+    },
+  },
+};
+
 export default function test() {
   
   group('api-document-store-go | get document file stored in AWS S3', () => {
 
-    var varDoc = randomIntBetween(1, 2000);
-
-    const url = 'https://api.uat.gray.net/document-store/documents/document/' + dataFile[varDoc].documentid;
+    const url = 'https://api.uat.gray.net/document-store/documents/document/' + dataFile[scenario.iterationInTest].documentid;
 
     const response = http.get(url);
     sleep(Math.random() * 2);

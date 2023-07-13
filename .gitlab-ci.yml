@@ -14,6 +14,18 @@ set-env-vars:
 publish:
   when: manual
 
+load-test-docstore-mongo-files:
+  stage: test
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/load-test-docstore-file-download-mongo.js --summary-export=load-performance-docstore-mongo-files.json
+  artifacts:
+    reports:
+      load_performance: load-performance-docstore-mongo-files.json
+
 performance-test-docstore-mongo-files:
   stage: test
   image: 
@@ -21,10 +33,10 @@ performance-test-docstore-mongo-files:
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
-    - k6 run ./__load_performance__/perf-test-docstore-file-download-mongo.js --summary-export=load-performance-docstore-mongo-files.json
+    - k6 run ./__load_performance__/perf-test-docstore-file-download-mongo.js --summary-export=perf-performance-docstore-mongo-files.json
   artifacts:
     reports:
-      load_performance: load-performance-docstore-mongo-files.json
+      load_performance: perf-performance-docstore-mongo-files.json
 
 performance-test-docstore-siebel-files:
   stage: test
@@ -33,10 +45,10 @@ performance-test-docstore-siebel-files:
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
-    - k6 run ./__load_performance__/perf-test-docstore-file-download-siebel.js --summary-export=load-performance-docstore-siebel-files.json
+    - k6 run ./__load_performance__/perf-test-docstore-file-download-siebel.js --summary-export=perf-performance-docstore-siebel-files.json
   artifacts:
     reports:
-      load_performance: load-performance-docstore-siebel-files.json
+      load_performance: perf-performance-docstore-siebel-files.json
 
 performance-test-docstore-aws-files:
   stage: test
@@ -45,10 +57,10 @@ performance-test-docstore-aws-files:
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
-    - k6 run ./__load_performance__/perf-test-docstore-file-download-aws.js --summary-export=load-performance-docstore-aws-files.json
+    - k6 run ./__load_performance__/perf-test-docstore-file-download-aws.js --summary-export=perf-performance-docstore-aws-files.json
   artifacts:
     reports:
-      load_performance: load-performance-docstore-aws-files.json
+      load_performance: perf-performance-docstore-aws-files.json
 
 performance-test-docstore-metadata:
   stage: test
@@ -57,10 +69,10 @@ performance-test-docstore-metadata:
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
-    - k6 run ./__load_performance__/perf-test-docstore-query-metadata.js --summary-export=load-performance-docstore-metadata.json
+    - k6 run ./__load_performance__/perf-test-docstore-query-metadata.js --summary-export=perf-performance-docstore-metadata.json
   artifacts:
     reports:
-      load_performance: load-performance-docstore-metadata.json
+      load_performance: perf-performance-docstore-metadata.json
 
 # performance-test-uat:
 #   stage: test
