@@ -16,6 +16,7 @@ publish:
 
 load-test-docstore-mongo-files:
   stage: test
+  when: manual
   image: 
     name: docker-registry.gray.net/common/performance-k6
     entrypoint: ['']
@@ -28,6 +29,7 @@ load-test-docstore-mongo-files:
 
 performance-test-docstore-mongo-files:
   stage: test
+  when: manual
   image: 
     name: docker-registry.gray.net/common/performance-k6
     entrypoint: ['']
@@ -40,6 +42,7 @@ performance-test-docstore-mongo-files:
 
 performance-test-docstore-siebel-files:
   stage: test
+  when: manual
   image: 
     name: docker-registry.gray.net/common/performance-k6
     entrypoint: ['']
@@ -52,6 +55,7 @@ performance-test-docstore-siebel-files:
 
 performance-test-docstore-aws-files:
   stage: test
+  when: manual
   image: 
     name: docker-registry.gray.net/common/performance-k6
     entrypoint: ['']
@@ -64,6 +68,7 @@ performance-test-docstore-aws-files:
 
 performance-test-docstore-metadata:
   stage: test
+  when: manual
   image: 
     name: docker-registry.gray.net/common/performance-k6
     entrypoint: ['']
@@ -74,17 +79,22 @@ performance-test-docstore-metadata:
     reports:
       load_performance: perf-performance-docstore-metadata.json
 
-# performance-test-uat:
-#   stage: test
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run ./__load_performance__/perf-test.js --summary-export=load-performance.json
-#   artifacts:
-#     reports:
-#       load_performance: load-performance.json
+performance-test-uat-benchmark:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run --out json=test_results.json --tag run=uat-onprem-ci ./__load_performance__/perf-test-uat-benchmark.js
+  after_script:
+    - npm i
+    - node results.js
+  artifacts:
+    paths:
+      - test_results.json
+      - results.txt
 
 # sql-performance-test-uat:
 #   stage: verify
