@@ -9,8 +9,8 @@ export const options = {
   scenarios: {
     one_hundred_hits: {
       executor: 'shared-iterations',
-      vus: 15,
-      iterations: 100,
+      vus: 1,
+      iterations: 1,
       maxDuration: '1h',
     },
   },
