@@ -22,8 +22,8 @@ const result = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => percent
 
 const config = {
   columns: {
-    0: { width: 20 },
-    1: { width: 100 },
+    0: { width: 10 },
+    1: { width: 80 },
   },
 };
 
