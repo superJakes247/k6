@@ -10,7 +10,7 @@ export const options = {
     one_hundred_hits: {
       executor: 'shared-iterations',
       vus: 15,
-      iterations: 100,
+      iterations: 150,
       maxDuration: '1h',
     },
   },

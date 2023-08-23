@@ -3,6 +3,10 @@
 const fs = require('fs-extra');
 const percentile = require('percentile');
 const { table } = require('table');
+const chalk = require('chalk');
+
+chalk.enabled = true;
+chalk.level = 3;
 
 const json = fs.readFileSync('./test_results.json', 'utf-8');
 const clean = json.split('\n').slice(0, -1);
@@ -22,15 +26,30 @@ const result = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => percent
 
 const config = {
   columns: {
-    0: { width: 10 },
-    1: { width: 80 },
+    0: { width: 20 },
+    1: { width: 90 },
+    2: { alignment: 'center' },
+    3: { alignment: 'center' },
+    4: { alignment: 'center' },
+    5: { alignment: 'center' },
+    6: { alignment: 'center' },
   },
 };
 
-const resPerScenario = uniqueScenarios.map((u, i) => result[i].map((r) => [r[0].scenario, r[0].url, ...r.map((rr) => rr.value)]));
+const count = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => arrayJson.filter((aj) => aj.url === url && aj.scenario === scenario).length));
+
+const resPerScenario = uniqueScenarios.map((u, i) => result[i].map((r, index) => [r[0].scenario, r[0].url, ...r.map((rr) => rr.value), JSON.stringify(count[i][index])]));
 const formattedResult = uniqueScenarios.map((u, i) => result[i].map((r) => `${r[0].scenario} | ${r[0].url} | ${r.map((rr) => rr.value).join(' | ')}`)).join('\n');
 
 const formattedResultColoured = resPerScenario;
-formattedResultColoured.map((t) => console.log(table([['Scenario', 'URL', 'Min', 'Max', '90 percentile ', '95 percentile'], ...t], config)));
+formattedResultColoured.map((t) => console.log(table([[
+  chalk.bold.magentaBright('Scenario'),
+  chalk.bold.magentaBright('URL'),
+  chalk.bold.magentaBright('Min (ms)'),
+  chalk.bold.magentaBright('Max (ms)'),
+  chalk.bold.magentaBright('90 percentile (ms)'),
+  chalk.bold.magentaBright('95 percentile (ms)'),
+  chalk.bold.magentaBright('Interations'),
+], ...t], config)));
 
 fs.writeFileSync('./results.txt', formattedResult);
