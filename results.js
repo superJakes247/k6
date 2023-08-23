@@ -12,7 +12,7 @@ const json = fs.readFileSync('./test_results.json', 'utf-8');
 const clean = json.split('\n').slice(0, -1);
 
 const arrayJson = clean.map((m) => JSON.parse(m)).filter((f) => f.type === 'Point' && f.metric === 'http_req_duration' && f.data.tags.expected_response === 'true').map((d) => ({
-  url: d.data.tags.url, value: d.data.value, scenario: d.data.tags.scenario, testRun: d.data.tags.run,
+  url: d.data.tags.url, value: d.data.value, time: d.data.time, scenario: d.data.tags.scenario, testRun: d.data.tags.run,
 }));
 
 const uniqueURLs = [...new Set(arrayJson.map((a) => a.url))];
@@ -38,7 +38,24 @@ const config = {
 
 const count = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => arrayJson.filter((aj) => aj.url === url && aj.scenario === scenario).length));
 
-const resPerScenario = uniqueScenarios.map((u, i) => result[i].map((r, index) => [r[0].scenario, r[0].url, ...r.map((rr) => rr.value), JSON.stringify(count[i][index])]));
+function minMax(items) {
+  return items.reduce((acc, val) => {
+    acc[0] = (acc[0] === undefined || val.time < acc[0]) ? val.time : acc[0];
+    acc[1] = (acc[1] === undefined || val.time > acc[1]) ? val.time : acc[1];
+    return acc;
+  }, []);
+}
+const runTime = uniqueScenarios
+  .map((scenario) => uniqueURLs
+    .map((url) => {
+      const [min, max] = minMax(arrayJson.filter((aj) => aj.url === url && aj.scenario === scenario));
+      const diff = Math.abs(new Date(max) - new Date(min));
+      const minutes = Math.floor((diff / 1000) / 60);
+      console.log([min, max]);
+      return minutes;
+    }));
+
+const resPerScenario = uniqueScenarios.map((u, i) => result[i].map((r, index) => [r[0].scenario, r[0].url, ...r.map((rr) => rr.value), JSON.stringify(count[i][index]), JSON.stringify(runTime[i][index])]));
 const formattedResult = uniqueScenarios.map((u, i) => result[i].map((r) => `${r[0].scenario} | ${r[0].url} | ${r.map((rr) => rr.value).join(' | ')}`)).join('\n');
 
 const formattedResultColoured = resPerScenario;
@@ -50,6 +67,7 @@ formattedResultColoured.map((t) => console.log(table([[
   chalk.bold.magentaBright('90 percentile (ms)'),
   chalk.bold.magentaBright('95 percentile (ms)'),
   chalk.bold.magentaBright('Interations'),
+  chalk.bold.magentaBright('Run time (minutes)'),
 ], ...t], config)));
 
 fs.writeFileSync('./results.txt', formattedResult);

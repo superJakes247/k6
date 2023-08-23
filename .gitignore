@@ -34,3 +34,4 @@ generated-tests.js
 results.html
 results.txt
 test_results.json
+test_results*.json
