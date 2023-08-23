@@ -26,8 +26,8 @@ const result = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => percent
 
 const config = {
   columns: {
-    0: { width: 20 },
-    1: { width: 90 },
+    0: { width: 10 },
+    1: { width: 70 },
     2: { alignment: 'center' },
     3: { alignment: 'center' },
     4: { alignment: 'center' },
@@ -51,7 +51,6 @@ const runTime = uniqueScenarios
       const [min, max] = minMax(arrayJson.filter((aj) => aj.url === url && aj.scenario === scenario));
       const diff = Math.abs(new Date(max) - new Date(min));
       const minutes = Math.floor((diff / 1000) / 60);
-      console.log([min, max]);
       return minutes;
     }));
 
