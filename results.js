@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const percentile = require('percentile');
 const { table } = require('table');
 const chalk = require('chalk');
+const asciichart = require('asciichart');
 
 chalk.enabled = true;
 chalk.level = 3;
@@ -11,15 +12,32 @@ chalk.level = 3;
 const json = fs.readFileSync('./test_results.json', 'utf-8');
 const clean = json.split('\n').slice(0, -1);
 
-const arrayJson = clean.map((m) => JSON.parse(m)).filter((f) => f.type === 'Point' && f.metric === 'http_req_duration' && f.data.tags.expected_response === 'true').map((d) => ({
-  url: d.data.tags.url, value: d.data.value, time: d.data.time, scenario: d.data.tags.scenario, testRun: d.data.tags.run,
+const arrayJson = clean.map((m) => JSON.parse(m)).filter((f) => f.type === 'Point' && f.metric === 'http_req_duration').map((d) => ({
+  url: d.data.tags.url, value: d.data.value, time: d.data.time, scenario: d.data.tags.scenario, testRun: d.data.tags.run, status: d.data.tags.expected_response,
 }));
+
+const successfulResponses = arrayJson.filter((f) => f.status === 'true');
+const failedResponses = arrayJson.filter((f) => f.status !== 'true');
 
 const uniqueURLs = [...new Set(arrayJson.map((a) => a.url))];
 const uniqueScenarios = [...new Set(arrayJson.map((a) => a.scenario))];
+
+const successRate = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => {
+  const success = successfulResponses.filter((aj) => aj.url === url && aj.scenario === scenario).length;
+  const failed = failedResponses.filter((aj) => aj.url === url && aj.scenario === scenario).length;
+
+  const rate = (success / (success + failed)) * 100;
+
+  return rate;
+}));
+
 const result = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => percentile(
   [0, 100, 90, 95],
-  arrayJson.filter((aj) => aj.url === url && aj.scenario === scenario),
+  arrayJson.filter((aj) => aj.url === url && aj.scenario === scenario).map((m) => {
+    // eslint-disable-next-line no-param-reassign
+    if (m.status !== 'true') m.value = 0;
+    return m;
+  }),
   // function to extract a value from an object
   (item) => item.value,
 )));
@@ -27,12 +45,15 @@ const result = uniqueScenarios.map((scenario) => uniqueURLs.map((url) => percent
 const config = {
   columns: {
     0: { width: 10 },
-    1: { width: 70 },
+    1: { width: 50 },
     2: { alignment: 'center' },
     3: { alignment: 'center' },
     4: { alignment: 'center' },
     5: { alignment: 'center' },
-    6: { alignment: 'center' },
+    6: { alignment: 'center', width: 8 },
+    7: { alignment: 'center', width: 8 },
+    8: { alignment: 'center', width: 8 },
+    9: { alignment: 'center' },
   },
 };
 
@@ -54,19 +75,50 @@ const runTime = uniqueScenarios
       return minutes;
     }));
 
-const resPerScenario = uniqueScenarios.map((u, i) => result[i].map((r, index) => [r[0].scenario, r[0].url, ...r.map((rr) => rr.value), JSON.stringify(count[i][index]), JSON.stringify(runTime[i][index])]));
-const formattedResult = uniqueScenarios.map((u, i) => result[i].map((r) => `${r[0].scenario} | ${r[0].url} | ${r.map((rr) => rr.value).join(' | ')}`)).join('\n');
+const graph = uniqueScenarios
+  .map((scenario) => uniqueURLs
+    .map((url) => arrayJson
+      .filter((aj) => aj.url === url && aj.scenario === scenario)
+      .map((m) => m.value)));
+
+const resPerScenario = uniqueScenarios
+  .map((u, i) => result[i]
+    .map((r, index) => [r[0]?.scenario, r[0]?.url, ...r
+      .map((rr) => rr?.value),
+    JSON.stringify(count[i][index]),
+    JSON.stringify(runTime[i][index]),
+    JSON.stringify(successRate[i][index]),
+    asciichart.plot(graph[i][index], {
+      height: 5,
+      colors: [asciichart.cyan],
+    }),
+    ]));
 
 const formattedResultColoured = resPerScenario;
 formattedResultColoured.map((t) => console.log(table([[
   chalk.bold.magentaBright('Scenario'),
   chalk.bold.magentaBright('URL'),
-  chalk.bold.magentaBright('Min (ms)'),
-  chalk.bold.magentaBright('Max (ms)'),
-  chalk.bold.magentaBright('90 percentile (ms)'),
-  chalk.bold.magentaBright('95 percentile (ms)'),
+  chalk.bold.magentaBright('Min\n(ms)'),
+  chalk.bold.magentaBright('Max\n(ms)'),
+  chalk.bold.magentaBright('90 percentile\n(ms)'),
+  chalk.bold.magentaBright('95 percentile\n(ms)'),
   chalk.bold.magentaBright('Interations'),
-  chalk.bold.magentaBright('Run time (minutes)'),
+  chalk.bold.magentaBright('Runtime\n(min)'),
+  chalk.bold.magentaBright('Success\nrate\n(%)'),
+  chalk.bold.magentaBright('Chart'),
 ], ...t], config)));
 
+// uniqueScenarios
+//   .map((scenario) => {
+//     console.log('___________________________________', scenario, '___________________________________', '\n');
+//     return uniqueURLs
+//       .map((url) => console.log(`${url}\n\n${asciichart.plot(arrayJson
+//         .filter((aj) => aj.url === url && aj.scenario === scenario)
+//         .map((m) => m.value), {
+//         height: 10,
+//         colors: [asciichart.cyan],
+//       })}`, '\n\n'));
+//   });
+
+const formattedResult = uniqueScenarios.map((u, i) => result[i].map((r, index) => `${r[0]?.scenario} | ${r[0]?.url} | ${r.map((rr) => rr?.value).join(' | ')} | ${JSON.stringify(count[i][index])} | ${JSON.stringify(runTime[i][index])} |  ${JSON.stringify(successRate[i][index])} `)).join('\n');
 fs.writeFileSync('./results.txt', formattedResult);

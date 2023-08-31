@@ -9,7 +9,7 @@ export const options = {
   scenarios: {
     one_hundred_hits: {
       executor: 'shared-iterations',
-      vus: 15,
+      vus: 10,
       iterations: 150,
       maxDuration: '1h',
     },
@@ -38,7 +38,7 @@ export default function test() {
   group('https://api.uat.gray.net/instrument/instruments/999/allocations', () => {
     const url = new URL('https://api.uat.gray.net/instrument/instruments/999/allocations');
 
-    url.searchParams.append('effectiveDate', '2023-07-24');
+    url.searchParams.append('effectiveDate', '202-07-24');
 
     const response = http.get(url.toString());
     sleep(Math.random() * 2);
