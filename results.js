@@ -75,11 +75,11 @@ const runTime = uniqueScenarios
       return minutes;
     }));
 
-const graph = uniqueScenarios
-  .map((scenario) => uniqueURLs
-    .map((url) => arrayJson
-      .filter((aj) => aj.url === url && aj.scenario === scenario)
-      .map((m) => m.value)));
+// const graph = uniqueScenarios
+//   .map((scenario) => uniqueURLs
+//     .map((url) => arrayJson
+//       .filter((aj) => aj.url === url && aj.scenario === scenario)
+//       .map((m) => m.value)));
 
 const resPerScenario = uniqueScenarios
   .map((u, i) => result[i]
@@ -88,10 +88,6 @@ const resPerScenario = uniqueScenarios
     JSON.stringify(count[i][index]),
     JSON.stringify(runTime[i][index]),
     JSON.stringify(successRate[i][index]),
-    asciichart.plot(graph[i][index], {
-      height: 5,
-      colors: [asciichart.cyan],
-    }),
     ]));
 
 const formattedResultColoured = resPerScenario;
@@ -105,20 +101,19 @@ formattedResultColoured.map((t) => console.log(table([[
   chalk.bold.magentaBright('Interations'),
   chalk.bold.magentaBright('Runtime\n(min)'),
   chalk.bold.magentaBright('Success\nrate\n(%)'),
-  chalk.bold.magentaBright('Chart'),
 ], ...t], config)));
 
-// uniqueScenarios
-//   .map((scenario) => {
-//     console.log('___________________________________', scenario, '___________________________________', '\n');
-//     return uniqueURLs
-//       .map((url) => console.log(`${url}\n\n${asciichart.plot(arrayJson
-//         .filter((aj) => aj.url === url && aj.scenario === scenario)
-//         .map((m) => m.value), {
-//         height: 10,
-//         colors: [asciichart.cyan],
-//       })}`, '\n\n'));
-//   });
+uniqueScenarios
+  .map((scenario) => {
+    console.log('=============================================', scenario, '=============================================', '\n');
+    return uniqueURLs
+      .map((url) => console.log(`${url}\n\n${asciichart.plot(arrayJson
+        .filter((aj) => aj.url === url && aj.scenario === scenario)
+        .map((m) => m.value), {
+        height: 10,
+        colors: [asciichart.cyan],
+      })}`, '\n\n'));
+  });
 
-const formattedResult = uniqueScenarios.map((u, i) => result[i].map((r, index) => `${r[0]?.scenario} | ${r[0]?.url} | ${r.map((rr) => rr?.value).join(' | ')} | ${JSON.stringify(count[i][index])} | ${JSON.stringify(runTime[i][index])} |  ${JSON.stringify(successRate[i][index])} `)).join('\n');
+const formattedResult = uniqueScenarios.map((u, i) => result[i].map((r, index) => `\n${r[0]?.scenario} | ${r[0]?.url} | ${r.map((rr) => rr?.value).join(' | ')} | ${JSON.stringify(count[i][index])} | ${JSON.stringify(runTime[i][index])} |  ${JSON.stringify(successRate[i][index])}`)).join('\n');
 fs.writeFileSync('./results.txt', formattedResult);
