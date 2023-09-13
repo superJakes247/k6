@@ -5,19 +5,24 @@ import { SharedArray } from 'k6/data';
 import { check, group, sleep } from 'k6';
 import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 import { scenario } from 'k6/execution';
-import { FormData } from 'https://jslib.k6.io/formdata/0.0.2/index.js';
 
-// const dataFile = new SharedArray('filesInMongoOnly', function () {
-//   return JSON.parse(open('./files-in-siebel-only.json'));
-// });
-const binFile = open('./PDFs/Ad hoc Savings Gray Issue Feb 2007.pdf', 'b');
+const Mainlist = JSON.parse(open('./files-pdf.json'));
+const dataFile = new SharedArray('PDFFiles', function () {
+  const list = JSON.parse(open('./files-pdf.json'));
+  const requests = [];
+  list.forEach(filePath => {
+    requests.push(open(`./PDFs/${filePath.fileLocation}`, 'b'))
+  });
+  return requests;
+});
+//const fileName = open('./PDFs/Ad hoc Savings Gray Issue Feb 2007.pdf', 'b');
 
 export const options = {
   scenarios: {
     linearTest: {
       executor: 'shared-iterations',
       vus: 1,
-      iterations: 1,
+      iterations: 3,
       maxDuration: '6m',
     },
   },
@@ -26,28 +31,32 @@ export const options = {
 export default function test() {
   
   group('api-document-store-go | get document file stored in Siebel', () => {
+    
+    const data = {
+      filename: 'regressionTestCreateMetadataOnlyFile.pdf',
+      mimeContentType: 'application/octet-stream',
+      category: 'Test Cat',
+      subCategory: 'Test Sub Cat',
+      entityType: 'serviceRequestNumber',
+      entityId: 'LoadDocumentPOST',
+      externalId: 'Test',
+      expiryDate: '2033-11-30T18:46:19.123',
+      isConfidential: 'false',
+      isStaffConfidential: 'false',
+      sourceSystem: 'regression-suite',
+      lastUpdatedBy: 'JUSTINMAJ',
+      status: 'ACTIVE',
+      file: http.file(dataFile[scenario.iterationInTest], Mainlist[scenario.iterationInTest].fileLocation, 'application/pdf'),
+    };
 
-    var form = new FormData();
-    form.append('entityType', 'organisationId');
-    form.append('entityId', 'justinUnitTest' + [scenario.iterationInTest]);
-    form.append('file', http.file(binFile, 'Ad hoc Savings Gray Issue Feb 2007.pdf'));
-    form.append('mimeContentType', 'application/octet-stream');
-    form.append('category', 'TestFile');
-    form.append('subCategory', 'TestFileSubType');
-    form.append('externalId', '');
-    form.append('sourceSystem', 'tool-api-performance-test');
-    form.append('expiryDate', '');
-    form.append('isSiebel', 'false');
-    form.append('isConfidential', 'false');
-    form.append('isStaffConfidential', 'false');
-    form.append('status', 'ACTIVE');
-    form.append('lastUpdatedBy', 'tool-api-performance-test');
+    const headers = {
+      'accept': 'application/json',
+      'Content-Type': 'multipart/form-data',
+    };
 
+    const response = http.post('https://api.uat.gray.net/document-store/documents/document', data, headers);
 
-    const response = http.post('https://api.uat.gray.net/document-store//documents/document', form.body(), {
-      headers: { 'Content-Type': 'multipart/form-data; boundary=' + form.boundary },
-    });
-    sleep(Math.random() * 2);
+    sleep(2);
     console.log(response.body);
     check(response, {
       'is status 200': (r) => r.status === 200,
