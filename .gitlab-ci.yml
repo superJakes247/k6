@@ -14,70 +14,70 @@ set-env-vars:
 publish:
   when: manual
 
-# load-test-docstore-mongo-files:
-#   stage: test
-#   when: manual
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run ./__load_performance__/load-test-docstore-file-download-mongo.js --summary-export=load-performance-docstore-mongo-files.json
-#   artifacts:
-#     reports:
-#       load_performance: load-performance-docstore-mongo-files.json
+load-test-docstore-mongo-files:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/load-test-docstore-file-download-mongo.js --summary-export=load-performance-docstore-mongo-files.json
+  artifacts:
+    reports:
+      load_performance: load-performance-docstore-mongo-files.json
 
-# performance-test-docstore-mongo-files:
-#   stage: test
-#   when: manual
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run ./__load_performance__/perf-test-docstore-file-download-mongo.js --summary-export=perf-performance-docstore-mongo-files.json
-#   artifacts:
-#     reports:
-#       load_performance: perf-performance-docstore-mongo-files.json
+performance-test-docstore-mongo-files:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/perf-test-docstore-file-download-mongo.js --summary-export=perf-performance-docstore-mongo-files.json
+  artifacts:
+    reports:
+      load_performance: perf-performance-docstore-mongo-files.json
 
-# performance-test-docstore-siebel-files:
-#   stage: test
-#   when: manual
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run ./__load_performance__/perf-test-docstore-file-download-siebel.js --summary-export=perf-performance-docstore-siebel-files.json
-#   artifacts:
-#     reports:
-#       load_performance: perf-performance-docstore-siebel-files.json
+performance-test-docstore-siebel-files:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/perf-test-docstore-file-download-siebel.js --summary-export=perf-performance-docstore-siebel-files.json
+  artifacts:
+    reports:
+      load_performance: perf-performance-docstore-siebel-files.json
 
-# performance-test-docstore-aws-files:
-#   stage: test
-#   when: manual
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run ./__load_performance__/perf-test-docstore-file-download-aws.js --summary-export=perf-performance-docstore-aws-files.json
-#   artifacts:
-#     reports:
-#       load_performance: perf-performance-docstore-aws-files.json
+performance-test-docstore-aws-files:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/perf-test-docstore-file-download-aws.js --summary-export=perf-performance-docstore-aws-files.json
+  artifacts:
+    reports:
+      load_performance: perf-performance-docstore-aws-files.json
 
-# performance-test-docstore-metadata:
-#   stage: test
-#   when: manual
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run ./__load_performance__/perf-test-docstore-query-metadata.js --summary-export=perf-performance-docstore-metadata.json
-#   artifacts:
-#     reports:
-#       load_performance: perf-performance-docstore-metadata.json
+performance-test-docstore-metadata:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/perf-test-docstore-query-metadata.js --summary-export=perf-performance-docstore-metadata.json
+  artifacts:
+    reports:
+      load_performance: perf-performance-docstore-metadata.json
 
 performance-test-docstore-uploads:
   stage: test
@@ -92,22 +92,22 @@ performance-test-docstore-uploads:
     reports:
       load_performance: perf-test-docstore-file-upload.json
 
-# performance-test-uat-benchmark:
-#   stage: test
-#   when: manual
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run --out json=test_results.json --tag run=uat-onprem-ci ./__load_performance__/perf-test-uat-benchmark.js
-#   after_script:
-#     - npm i
-#     - node results.js
-#   artifacts:
-#     paths:
-#       - test_results.json
-#       - results.txt
+performance-test-uat-benchmark:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+    entrypoint: ['']
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run --out json=test_results.json --tag run=uat-onprem-ci ./__load_performance__/perf-test-uat-benchmark.js
+  after_script:
+    - npm i
+    - node results.js
+  artifacts:
+    paths:
+      - test_results.json
+      - results.txt
 
 # sql-performance-test-uat:
 #   stage: verify
