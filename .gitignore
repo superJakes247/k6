@@ -13,6 +13,7 @@
 /dist
 /package
 *.tgz
+/__load_performance__/PDFs
 
 # misc
 .DS_Store
@@ -29,6 +30,7 @@ yarn-error.log*
 .env.mocked
 
 *.csv
+*.pdf
 *logs*
 generated-tests.js
 results.html
