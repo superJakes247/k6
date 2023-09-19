@@ -84,7 +84,6 @@ performance-test-docstore-uploads:
   when: manual
   image: 
     name: docker-registry.gray.net/common/performance-k6
-    entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
     - k6 run ./__load_performance__/perf-test-docstore-file-upload.js --summary-export=perf-test-docstore-file-upload.json

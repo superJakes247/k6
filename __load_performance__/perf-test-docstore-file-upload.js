@@ -60,7 +60,6 @@ export default function test() {
     const response = http.post('https://api.uat.gray.net/document-store/documents/document', data, headers);
 
     sleep(2);
-    //console.log(response.body);
     check(response, {
       'is status 200': (r) => r.status === 200,
     });
