@@ -79,6 +79,18 @@ performance-test-docstore-metadata:
     reports:
       load_performance: perf-performance-docstore-metadata.json
 
+performance-test-docstore-uploads:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/perf-test-docstore-file-upload.js --summary-export=perf-test-docstore-file-upload.json
+  artifacts:
+    reports:
+      load_performance: perf-test-docstore-file-upload.json
+
 performance-test-uat-benchmark:
   stage: test
   when: manual
