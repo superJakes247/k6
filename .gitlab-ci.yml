@@ -91,6 +91,18 @@ performance-test-docstore-uploads:
     reports:
       load_performance: perf-test-docstore-file-upload.json
 
+performance-test-public-site-downloads:
+  stage: test
+  when: manual
+  image: 
+    name: docker-registry.gray.net/common/performance-k6
+  script:
+    - echo "executing local k6 in k6 container..."
+    - k6 run ./__load_performance__/perf-test-public-site-documents-download.js --summary-export=perf-test-public-site-documents-download.json
+  artifacts:
+    reports:
+      load_performance: perf-test-public-site-documents-download.json
+
 performance-test-uat-benchmark:
   stage: test
   when: manual
