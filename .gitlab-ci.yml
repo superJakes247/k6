@@ -120,17 +120,17 @@ performance-test-uat-benchmark:
       - test_results.json
       - results.txt
 
-# sql-performance-test-uat:
-#   stage: verify
-#   image: 
-#     name: docker-registry.gray.net/common/performance-k6
-#     entrypoint: ['']
-#   script:
-#     - echo "executing local k6 in k6 container..."
-#     - k6 run ./__load_performance__/sql-perf-test.js --summary-export=sql-load-performance.json
-#   artifacts:
-#     reports:
-#       load_performance: sql-load-performance.json
-#   needs:
-#     - job: set-env-vars
-#       artifacts: true
+hygiene:
+  image: docker-registry.agpl.cloud/common/node-testtools:18
+  stage: build
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      exists:
+        - package.json
+      when: always
+  script:
+    - npm --quiet --no-progress --depth=0 --color=always ci
+    - npm run test:lint
+    - npm outdated --colors || true
+    - npm audit --registry=https://registry.npmjs.org --audit-level=moderate

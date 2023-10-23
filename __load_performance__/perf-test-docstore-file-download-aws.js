@@ -6,9 +6,7 @@ import { check, group, sleep } from 'k6';
 import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 import { scenario } from 'k6/execution';
 
-const dataFile = new SharedArray('filesInAWSOnly', function () {
-  return JSON.parse(open('./files-in-aws-only.json'));
-});
+const dataFile = new SharedArray('filesInAWSOnly', (() => JSON.parse(open('./files-in-aws-only.json'))));
 
 export const options = {
   scenarios: {
@@ -16,16 +14,14 @@ export const options = {
       executor: 'shared-iterations',
       vus: 10,
       iterations: dataFile.length,
-      maxDuration: "6m",
+      maxDuration: '6m',
     },
   },
 };
 
 export default function test() {
-  
   group('api-document-store-go | get document file stored in AWS S3', () => {
-
-    const url = 'https://api.uat.gray.net/document-store/documents/document/' + dataFile[scenario.iterationInTest].documentid;
+    const url = `https://api.uat.gray.net/document-store/documents/document/${dataFile[scenario.iterationInTest].documentid}`;
 
     const response = http.get(url);
     sleep(Math.random() * 2);
@@ -33,7 +29,6 @@ export default function test() {
       'is status 200': (r) => r.status === 200,
     });
   });
-
 }
 
 export function handleSummary(data) {

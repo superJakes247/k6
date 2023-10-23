@@ -21,17 +21,13 @@ export const options = {
   },
 };
 
-const dataFile = new SharedArray('filesInMongoOnly', function () {
-  return JSON.parse(open('./files-in-mongo-only.json'));
-});
+const dataFile = new SharedArray('filesInMongoOnly', (() => JSON.parse(open('./files-in-mongo-only.json'))));
 
 export default function test() {
-  
   group('api-document-store-go | get document file stored in Mongo', () => {
+    const varDoc = randomIntBetween(1, 2000);
 
-    var varDoc = randomIntBetween(1, 2000);
-
-    const url = 'https://api.uat.gray.net/document-store/documents/document/' + dataFile[varDoc].documentid;
+    const url = `https://api.uat.gray.net/document-store/documents/document/${dataFile[varDoc].documentid}`;
 
     const response = http.get(url);
     sleep(Math.random() * 2);
@@ -39,7 +35,6 @@ export default function test() {
       'is status 200': (r) => r.status === 200,
     });
   });
-
 }
 
 export function handleSummary(data) {

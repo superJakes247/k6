@@ -4,6 +4,8 @@
   "description": "repo to try out K6 testing",
   "main": "index.js",
   "scripts": {
+    "test:lint": "npm run lint:scripts --",
+    "lint:scripts": "eslint . --ext .js",
     "test": "jest"
   },
   "repository": {
@@ -13,17 +15,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.35.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.27.5"
+    "eslint": "8.35.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.27.5"
   },
   "dependencies": {
-    "asciichart": "^1.5.25",
-    "chalk": "^4.1.2",
-    "fs-extra": "^11.1.1",
-    "percentile": "^1.6.0",
-    "qs": "^6.11.2",
-    "string-comparison": "^1.1.0",
-    "table": "^6.8.1"
+    "asciichart": "1.5.25",
+    "chalk": "4.1.2",
+    "fs-extra": "11.1.1",
+    "percentile": "1.6.0",
+    "qs": "6.11.2",
+    "string-comparison": "1.1.0",
+    "table": "6.8.1"
   }
 }

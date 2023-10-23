@@ -9,16 +9,16 @@ import encoding from 'k6/encoding';
 
 const Mainlist = JSON.parse(open('./files-pdf.json'));
 
-const dataFile = new SharedArray('PDFFiles', function () {
+const dataFile = new SharedArray('PDFFiles', (() => {
   const list = JSON.parse(open('./files-pdf.json'));
   const requests = [];
-  list.forEach(filePath => {
+  list.forEach((filePath) => {
     const binFile = open(`./PDFs/${filePath.fileLocation}`, 'b');
     const encFile = encoding.b64encode(binFile, 'url');
-    requests.push(encFile)
+    requests.push(encFile);
   });
   return requests;
-});
+}));
 
 export const options = {
   scenarios: {
@@ -32,9 +32,7 @@ export const options = {
 };
 
 export default function test() {
-  
   group('api-document-store-go | get document file stored in Siebel', () => {
-    
     const data = {
       filename: 'regressionTestCreateMetadataOnlyFile.pdf',
       mimeContentType: 'application/octet-stream',
@@ -42,18 +40,18 @@ export default function test() {
       subCategory: 'Test Sub Cat',
       entityType: 'serviceRequestNumber',
       entityId: 'LoadDocumentPOST',
-      externalId: 'Test' + [scenario.iterationInTest],
+      externalId: `Test${[scenario.iterationInTest]}`,
       expiryDate: '2033-11-30T18:46:19.123',
       isConfidential: 'false',
       isStaffConfidential: 'false',
       sourceSystem: 'tool-api-performance-tes',
       lastUpdatedBy: 'JUSTINMAJ',
       status: 'ACTIVE',
-      file: http.file(encoding.b64decode(dataFile[scenario.iterationInTest],'url'), Mainlist[scenario.iterationInTest].fileLocation, 'application/pdf'),
+      file: http.file(encoding.b64decode(dataFile[scenario.iterationInTest], 'url'), Mainlist[scenario.iterationInTest].fileLocation, 'application/pdf'),
     };
 
     const headers = {
-      'accept': 'application/json',
+      accept: 'application/json',
       'Content-Type': 'multipart/form-data',
     };
 
@@ -64,7 +62,6 @@ export default function test() {
       'is status 200': (r) => r.status === 200,
     });
   });
-
 }
 
 export function handleSummary(data) {
