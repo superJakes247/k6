@@ -2,7 +2,7 @@ version: '3'
 
 services:
   generate-env:
-    image: docker-registry.gray.net/ci/deploy-tools
+    image: 860638170744.dkr.ecr.af-south-1.amazonaws.com/ci/deploy-tools:latest
     volumes:
       - .:/api
     working_dir: /api
@@ -10,7 +10,7 @@ services:
       ag-deploy encrypt -d -p ' ' \"$$(cat .env.enc)\" > .env"
 
   generate-enc:
-    image: docker-registry.gray.net/ci/deploy-tools
+    image: 860638170744.dkr.ecr.af-south-1.amazonaws.com/ci/deploy-tools:latest
     volumes:
       - .:/api
     working_dir: /api
