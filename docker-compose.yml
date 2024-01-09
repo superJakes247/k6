@@ -27,7 +27,7 @@ services:
     working_dir: /project
 
   performance:
-    image: docker-registry.gray.net/common/performance-k6
+    image: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
     user: root
     entrypoint: [""]
     container_name: performance-k6

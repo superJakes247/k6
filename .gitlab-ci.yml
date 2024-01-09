@@ -18,7 +18,7 @@ load-test-docstore-mongo-files:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
@@ -31,7 +31,7 @@ performance-test-docstore-mongo-files:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
@@ -44,7 +44,7 @@ performance-test-docstore-siebel-files:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
@@ -57,7 +57,7 @@ performance-test-docstore-aws-files:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
@@ -70,7 +70,7 @@ performance-test-docstore-metadata:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
@@ -83,7 +83,7 @@ performance-test-docstore-uploads:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
   script:
     - echo "executing local k6 in k6 container..."
     - k6 run ./__load_performance__/perf-test-docstore-file-upload.js --summary-export=perf-test-docstore-file-upload.json
@@ -95,7 +95,7 @@ performance-test-public-site-downloads:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
   script:
     - echo "executing local k6 in k6 container..."
     - k6 run ./__load_performance__/perf-test-public-site-documents-download.js --summary-export=perf-test-public-site-documents-download.json
@@ -107,7 +107,7 @@ performance-test-uat-benchmark:
   stage: test
   when: manual
   image: 
-    name: docker-registry.gray.net/common/performance-k6
+    name: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/performance-k6:latest
     entrypoint: ['']
   script:
     - echo "executing local k6 in k6 container..."
