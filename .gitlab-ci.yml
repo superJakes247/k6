@@ -121,7 +121,7 @@ performance-test-uat-benchmark:
       - results.txt
 
 hygiene:
-  image: docker-registry.agpl.cloud/common/node-testtools:18
+  image: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/node-testtools:18
   stage: build
   allow_failure: true
   rules:

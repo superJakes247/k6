@@ -18,7 +18,7 @@ services:
       ag-deploy encrypt -p ' ' \"$$(cat .env)\" > .env.enc"
 
   testtools:
-    image: docker-registry.agpl.cloud/common/node-testtools:18
+    image: 860638170744.dkr.ecr.af-south-1.amazonaws.com/common/node-testtools:18
     user: node
     container_name: testtools
     hostname: testtools
