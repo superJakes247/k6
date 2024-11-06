@@ -55,7 +55,7 @@ export default function test() {
       'Content-Type': 'multipart/form-data',
     };
 
-    const response = http.post('https://api.uat.gray.net/document-store/documents/document', data, headers);
+    const response = http.post('https://api.matt.jakes.net/document-store/documents/document', data, headers);
 
     sleep(2);
     check(response, {

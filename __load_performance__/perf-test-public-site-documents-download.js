@@ -22,7 +22,7 @@ export const options = {
 export default function test() {
   group('api-public-site-documents | get document file stored in Mongo', () => {
     const documentID = encodeURI(dataFile[scenario.iterationInTest].fileName);
-    const url = `https://api.uat.gray.net/public-site-document/documents/fund/${dataFile[scenario.iterationInTest].entityId}/factsheet/${documentID}`;
+    const url = `https://api.matt.jakes.net/public-site-document/documents/fund/${dataFile[scenario.iterationInTest].entityId}/factsheet/${documentID}`;
 
     const response = http.get(url);
     sleep(Math.random() * 2);

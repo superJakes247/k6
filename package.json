@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.gray.net:retail/testing/tool-api-performance-test.git"
+    "url": "git@github.com:superJakes247/k6.git"
   },
   "author": "",
   "license": "ISC",

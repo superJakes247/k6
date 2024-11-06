@@ -27,7 +27,7 @@ export default function test() {
   group('api-document-store-go | get document file stored in Mongo', () => {
     const varDoc = randomIntBetween(1, 2000);
 
-    const url = `https://api.uat.gray.net/document-store/documents/document/${dataFile[varDoc].documentid}`;
+    const url = `https://api.matt.jakes.net/document-store/documents/document/${dataFile[varDoc].documentid}`;
 
     const response = http.get(url);
     sleep(Math.random() * 2);
